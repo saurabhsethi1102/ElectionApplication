@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        tools:context=".ThirdGender"
+        android:background="#fff"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+
+            <LinearLayout
+                android:id="@+id/layoutMobile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_margin="20dp">
+                <TextView
+                    android:id="@+id/mobile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mobile Number"
+                    android:textColor="#000"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="15dp"
+                    android:drawableLeft="@drawable/pickup"
+                    android:drawablePadding="10dp"/>
+                <EditText
+                    android:inputType="phone"
+                    android:id="@+id/mobile_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:timePickerMode="spinner"
+                    android:hint="Enter Mobile Number"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp">
+                <TextView
+                    android:id="@+id/pickUptime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pick_up_time"
+                    android:textColor="#000"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="15dp"
+                    android:drawableLeft="@drawable/pickup"
+                    android:drawablePadding="10dp"/>
+                <TimePicker
+                    android:id="@+id/pickUpTime"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:timePickerMode="spinner"
+                    android:hint="Enter PickUp Time"/>
+
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layoutPoint"
+                android:gravity="center"
+                android:layout_below="@+id/layoutTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp">
+                <Button
+                    android:id="@+id/pickUpPoint"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pick_up_point"
+                    android:textAllCaps="false"
+                    android:textSize="18dp"
+                    android:textColor="#fff"
+                    android:background="@color/colorPrimary"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:textAlignment="center"
+                    android:paddingLeft="55dp"
+                    android:paddingRight="55dp"
+                    android:elevation="8dp"
+                    android:drawableLeft="@drawable/ic_place_white_24dp"
+                    android:drawablePadding="5dp"
+                    />
+            </LinearLayout>
+            <Button
+                android:id="@+id/submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/submit_request"
+                android:textAllCaps="false"
+                android:textSize="18dp"
+                android:textColor="#fff"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textAlignment="center"
+                android:paddingLeft="55dp"
+                android:paddingRight="55dp"
+                android:elevation="8dp"
+                android:drawablePadding="5dp"
+                />
+        </LinearLayout>
+    </ScrollView>
