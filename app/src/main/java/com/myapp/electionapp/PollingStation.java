@@ -6,149 +6,131 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class PollingStation extends AppCompatActivity {
-    private WebView webView;
-    private FloatingActionButton fab;
-    private SwipeRefreshLayout swipeRefreshLayout;
-    private ProgressDialog progress;
+    WebView wv1;
+    TextView textView;
+    Handler mHandler = new Handler();
+    public static String psname,p_name,f_name,ac_name,gender,epic_no;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().requestFeature(Window.FEATURE_PROGRESS);
         setContentView(R.layout.activity_polling_station);
-
-        if (Main2Activity.lang==1){
-            updateViews("hi");
-        }
-        else {
-            updateViews("en");
-        }
-
-        getWindow().setFeatureInt(Window.FEATURE_PROGRESS, Window.PROGRESS_VISIBILITY_ON);
-        swipeRefreshLayout = (SwipeRefreshLayout)findViewById(R.id.webViewSwipeRefreshLayout);
+        final WebView webview = (WebView) findViewById(R.id.webview);
+        final SwipeRefreshLayout swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.webViewSwipeRefreshLayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadURL();
+                webview.loadUrl("https://electoralsearch.in/");
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
-        loadURL();
-
-        progress= new ProgressDialog(PollingStation.this);
+        final ProgressDialog progress=new ProgressDialog(PollingStation.this);
         progress.setMessage("Loading Page...");
         progress.show();
-        fab = (FloatingActionButton)findViewById(R.id.floating_button);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(PollingStation.this,BoothActivity2.class));
-            }
-        });
-    }
-
-    public void updateViews(String languageCode){
-        Context context=LocaleHelper.setLocale(this, languageCode);
-        Resources resources=context.getResources();
-
-        getSupportActionBar().setTitle(resources.getString(R.string.know_your_polling_station));
-    }
-    private void loadURL() {
-        webView = (WebView)findViewById(R.id.webview);
-        swipeRefreshLayout.setRefreshing(true);
-        //spinner.setVisibility(View.VISIBLE);
-        webView.setWebViewClient(new WebViewClient(){
-            private String address = "https://electoralsearch.in/##resultArea";
-//            @Override
-//            public void onLoadResource(WebView view, String url) {
-//                //                super.onLoadResource(view, url);
-//                if(url.equals("https://electoralsearch.in/##resultArea")){
-//                    Toast.makeText(MainActivity.this, "Result Page Opened", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-//                return super.shouldOverrideUrlLoading(view, url);
-                if(url.equals(address)){
-                    Toast.makeText(PollingStation.this, "Result Obtained", Toast.LENGTH_SHORT).show();
-                    return  true;
-                }
-                else{
-                    Toast.makeText(PollingStation.this, "Result Not Obtained", Toast.LENGTH_SHORT).show();
-                    return false;
-                }
-            }
-
-//            @Override
-//            public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
-//                if(url.equals(address)){
-//                    Toast.makeText(MainActivity.this, "Result Obtained", Toast.LENGTH_SHORT).show();
-//                }
-//                else{
-//                    Toast.makeText(MainActivity.this, "Result Not Obtained", Toast.LENGTH_SHORT).show();
-//                }
-//                return super.shouldInterceptRequest(view, url);
-//
-//            }
-
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                if (progress.isShowing()){
-                    progress.dismiss();
-                    //AlertDailog
-                    AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(PollingStation.this);
-                    alertDialogBuilder.setTitle("Instructions");
-                    alertDialogBuilder.setMessage("Enter EPIC Number or your details to get the name of your polling station. \nClick on the Button at the bottom right corner to know more.");
-                    alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    });
-                    AlertDialog alertDialog=alertDialogBuilder.create();
-                    alertDialog.show();
-
-                }
-            }
-        });
-        webView.getSettings().setRenderPriority(WebSettings.RenderPriority.HIGH);
-        webView.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
-        webView.getSettings().setAppCacheEnabled(true);
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
-        webSettings.setUseWideViewPort(true);
-        webSettings.setSavePassword(true);
-        webSettings.setSaveFormData(true);
-        webView.loadUrl("https://electoralsearch.in/");
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setDomStorageEnabled(true);
         swipeRefreshLayout.setRefreshing(false);
-        //spinner.setVisibility(View.GONE);
+        webview.addJavascriptInterface(new MyJavaScriptInterface(this), "HtmlViewer");
+        webview.loadUrl("https://electoralsearch.in/");
+        webview.setWebViewClient(new WebViewClient() {
+                                     @Override
+                                     public void onPageFinished(WebView view, String url) {
+                                         if (progress.isShowing()){
+                                             progress.dismiss();
+                                             AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(PollingStation.this);
+                                             alertDialogBuilder.setTitle("Instructions");
+                                             alertDialogBuilder.setMessage("Enter EPIC Number or your details to get the details of your polling station.");
+                                             alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                                 @Override
+                                                 public void onClick(DialogInterface dialog, int which) {
+
+                                                 }
+                                             });
+                                             AlertDialog alertDialog=alertDialogBuilder.create();
+                                             alertDialog.show();
+
+                                         }
+                                         webview.loadUrl("javascript:window.HtmlViewer.showHTML" +
+                                                 "('&lt;html&gt;'+document.getElementsByTagName('form')[2].innerHTML+'&lt;/html&gt;');");
+                                     }
+                                 }
+        );
+        webview.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                String webUrl = webview.getUrl();
+                if (webUrl == "https://electoralsearch.in/##resultArea") {
+
+                }
+                //Toast.makeText(getApplicationContext(), webUrl, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        });
     }
 
-    @Override
-    public void onBackPressed() {
-        if(webView.canGoBack()){
-            webView.goBack();
+    class MyJavaScriptInterface {
+        private Context ctx;
+
+        MyJavaScriptInterface(Context ctx) {
+            this.ctx = ctx;
         }
-        else{
-            super.onBackPressed();
+
+        @JavascriptInterface
+        public void showHTML(final String html) {
+            final String html_ = html;
+            mHandler.post(new Runnable() {
+                              @Override
+                              public void run() {
+                                  //Toast.makeText(ctx, html_, Toast.LENGTH_LONG).show();
+                                  String[] b = html_.split("<input type=\"hidden\" id=\"acno\" name=\"ac_no\" value=\"");
+                                  String[] ac_no = b[1].split("\">");
+                                  String[] a = html_.split("<input type=\"hidden\" name=\"ps_name\" value=\"");
+                                  String[] ps_name = a[1].split("\">");
+                                  psname = ps_name[0];
+                                  a = html_.split("<input type=\"hidden\" name=\"name\" value=\"");
+                                  ps_name = a[1].split("\">");
+                                  p_name = ps_name[0];
+                                  a = html_.split("<input type=\"hidden\" name=\"gender\" value=\"");
+                                  ps_name = a[1].split("\">");
+                                  gender = ps_name[0];
+                                  a = html_.split("<input type=\"hidden\" name=\"ac_name\" value=\"");
+                                  ps_name = a[1].split("\">");
+                                  ac_name = ps_name[0];
+                                  //Toast.makeText(ctx, ac_no[0], Toast.LENGTH_LONG).show();
+                                  //Toast.makeText(ctx, ps_name[0], Toast.LENGTH_SHORT).show();
+                                  if (ac_no[0].equals("4")||ac_no[0].equals("14")||ac_no[0].equals("15")||ac_no[0].equals("16")||ac_no[0].equals("17")||ac_no[0].equals("18")||ac_no[0].equals("19")||ac_no[0].equals("20")||ac_no[0].equals("21")||ac_no[0].equals("22")){
+                                      if (ps_name[0] != null) {
+                                          startActivity(new Intent(PollingStation.this, BoothActivity2.class));
+                                      }
+                                  }
+                                  else{
+                                      startActivity(new Intent(PollingStation.this, Main2Activity.class));
+                                      finish();
+
+                                  }
+
+                              }
+                          }
+            );
         }
 
     }

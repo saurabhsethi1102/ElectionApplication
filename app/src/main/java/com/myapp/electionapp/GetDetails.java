@@ -10,10 +10,12 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +31,19 @@ public class GetDetails extends AsyncTask<String,Void,String> {
     }
     @Override
     protected String doInBackground(String... strings) {
+        String psname = PollingStation.psname;
         try{
             String link="http://avrutti.com/election/details.php";
+            String data  = URLEncoder.encode("psname", "UTF-8") + "=" +
+                    URLEncoder.encode(psname, "UTF-8");
             URL url = new URL(link);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
+            conn.setReadTimeout(100000);
+            OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
+            wr.write( data );
+            wr.flush();
+
             BufferedReader reader = new BufferedReader(new
                     InputStreamReader(conn.getInputStream()));
             StringBuilder sb = new StringBuilder();
@@ -65,7 +75,7 @@ public class GetDetails extends AsyncTask<String,Void,String> {
         int length = (splitArray.length);
         for (int i=0; i<length; i=i+4){
             String name=splitArray[i];
-            String capacity="Capacity - "+splitArray[i+1];
+            String capacity="No. of People in Queue - "+splitArray[i+1];
             String facilities="Facilities Available -"+splitArray[i+2];
             ar.add(splitArray[i+3]);
             String coordinateS = splitArray[i+3];
@@ -73,7 +83,7 @@ public class GetDetails extends AsyncTask<String,Void,String> {
             myDetailsList.add(new myDetails(name,capacity,facilities,coordinateS,imageurl));
         }
         DetailsAdapter adapter = new DetailsAdapter(context, myDetailsList);
-        //setting adapter to recyclerview
+//        setting adapter to recyclerview0
         recyclerView.setAdapter(adapter);
     }
 }
