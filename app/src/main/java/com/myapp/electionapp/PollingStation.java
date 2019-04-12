@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.net.http.SslError;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.webkit.JavascriptInterface;
+import android.webkit.SslErrorHandler;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -39,7 +41,7 @@ public class PollingStation extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                webview.loadUrl("https://electoralsearch.in/");
+                webview.loadUrl("https://ceodelhi.gov.in/home.aspx");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -48,29 +50,17 @@ public class PollingStation extends AppCompatActivity {
         progress.show();
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setDomStorageEnabled(true);
+        webview.getSettings().setLoadWithOverviewMode(true);
         swipeRefreshLayout.setRefreshing(false);
         webview.addJavascriptInterface(new MyJavaScriptInterface(this), "HtmlViewer");
-        webview.loadUrl("https://electoralsearch.in/");
+        webview.loadUrl("https://ceodelhi.gov.in/home.aspx");
         webview.setWebViewClient(new WebViewClient() {
                                      @Override
                                      public void onPageFinished(WebView view, String url) {
                                          if (progress.isShowing()){
                                              progress.dismiss();
-                                             AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(PollingStation.this);
-                                             alertDialogBuilder.setTitle("Instructions");
-                                             alertDialogBuilder.setMessage("Enter EPIC Number or your details to get the details of your polling station.");
-                                             alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                                                 @Override
-                                                 public void onClick(DialogInterface dialog, int which) {
-
-                                                 }
-                                             });
-                                             AlertDialog alertDialog=alertDialogBuilder.create();
-                                             alertDialog.show();
-
                                          }
-                                         webview.loadUrl("javascript:window.HtmlViewer.showHTML" +
-                                                 "('&lt;html&gt;'+document.getElementsByTagName('form')[2].innerHTML+'&lt;/html&gt;');");
+                                         //webview.loadUrl("javascript:window.HtmlViewer.showHTML" +"('&lt;html&gt;'+document.getElementsByTagName('form')[2].innerHTML+'&lt;/html&gt;');");
                                      }
                                  }
         );
@@ -85,6 +75,10 @@ public class PollingStation extends AppCompatActivity {
                 return false;
             }
         });
+
+    }
+    public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+        handler.proceed(); // Ignore SSL certificate errors
     }
 
     class MyJavaScriptInterface {
@@ -119,7 +113,18 @@ public class PollingStation extends AppCompatActivity {
                                   //Toast.makeText(ctx, ps_name[0], Toast.LENGTH_SHORT).show();
                                   if (ac_no[0].equals("4")||ac_no[0].equals("14")||ac_no[0].equals("15")||ac_no[0].equals("16")||ac_no[0].equals("17")||ac_no[0].equals("18")||ac_no[0].equals("19")||ac_no[0].equals("20")||ac_no[0].equals("21")||ac_no[0].equals("22")){
                                       if (ps_name[0] != null) {
-                                          startActivity(new Intent(PollingStation.this, BoothActivity2.class));
+
+                                          AlertDialog.Builder alertDialogBuilder=new AlertDialog.Builder(PollingStation.this);
+                                          alertDialogBuilder.setTitle("Polling Station Details");
+                                          alertDialogBuilder.setMessage(ps_name[0]);
+                                          alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                              @Override
+                                              public void onClick(DialogInterface dialog, int which) {
+                                                  startActivity(new Intent(PollingStation.this, BoothActivity2.class));
+                                              }
+                                          });
+                                          AlertDialog alertDialog=alertDialogBuilder.create();
+                                          alertDialog.show();
                                       }
                                   }
                                   else{

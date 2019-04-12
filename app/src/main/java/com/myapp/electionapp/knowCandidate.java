@@ -24,59 +24,9 @@ public class knowCandidate extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_know_candidate);
-
-
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
-          /*Intent i1=new Intent(Intent.ACTION_VIEW, Uri());
-          startActivity(i1);*/
-        candidatesList = new ArrayList<>();
-
-
-        if (Main2Activity.lang == 1) {
-            updateViews("hi");
-        }
-        else{
-            updateViews("en");
-        }
-        candidatesList.add(
-                new Candidates(R.drawable.vijaygoyal,
-                        "Vijay Goyal",
-                        "Bhartiya Janata Party",
-                        R.drawable.bjpicon,
-                       "click here"));
-
-
-        candidatesList.add(
-                new Candidates(R.drawable.pankajgupta,
-                        "Pankaj Gupta",
-                        " Aam Admi Party",
-                        R.drawable.aapicon,
-                        "Click Here "));
-
-
-        candidatesList.add(
-                new Candidates(R.drawable.kapilsibal,
-                        "Kapil Sibal",
-                        " Indian National Congress",
-                        R.drawable.congressicon,
-                        "Click Here "));
-
-
-        candidatesList.add(
-                new Candidates(R.drawable.narendrakumarpandey,
-                        "Narendra Kumar Pandey",
-                        " Bahujan Samaj Party",
-                        R.drawable.bspicon,
-                        "Click Here "));
-
-        CandidateAdapter adapter = new CandidateAdapter(this, candidatesList);
-
-        //setting adapter to recyclerview
-        recyclerView.setAdapter(adapter);
-
+        candidateDetails candidateDetails=new candidateDetails(this, recyclerView);
+        candidateDetails.execute();
     }
     public void updateViews(String languageCode){
         Context context=LocaleHelper.setLocale(this, languageCode);

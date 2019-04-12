@@ -1,19 +1,21 @@
 package com.myapp.electionapp;
 
+import android.graphics.Bitmap;
+
 public class Candidates {
 
-    private int candidateImage;
+    private Bitmap candidateImage;
     private String name;
     private String party;
-    private int symbol;
+    private Bitmap symbol;
     private String affidavit;
 
-    public Candidates(int candidateImage, String name, String party, int symbol, String affidavit) {
+    public Candidates(Bitmap candidateImage, String name, String party, Bitmap symbol) {
         this.candidateImage = candidateImage;
         this.name = name;
         this.party = party;
         this.symbol = symbol;
-        this.affidavit = affidavit;
+
     }
 
     public int getCandidateImage() {
@@ -30,9 +32,5 @@ public class Candidates {
 
     public int getSymbol() {
         return symbol;
-    }
-
-    public String getAffidavit() {
-        return affidavit;
     }
 }
