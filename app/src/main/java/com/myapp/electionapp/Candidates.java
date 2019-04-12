@@ -18,7 +18,7 @@ public class Candidates {
 
     }
 
-    public int getCandidateImage() {
+    public Bitmap getCandidateImage() {
         return candidateImage;
     }
 
@@ -30,7 +30,7 @@ public class Candidates {
         return party;
     }
 
-    public int getSymbol() {
+    public Bitmap getSymbol() {
         return symbol;
     }
 }

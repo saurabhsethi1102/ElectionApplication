@@ -41,7 +41,7 @@ public class PollingStation extends AppCompatActivity {
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                webview.loadUrl("https://ceodelhi.gov.in/home.aspx");
+                webview.loadUrl("https://electoralsearch.in");
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
@@ -53,14 +53,14 @@ public class PollingStation extends AppCompatActivity {
         webview.getSettings().setLoadWithOverviewMode(true);
         swipeRefreshLayout.setRefreshing(false);
         webview.addJavascriptInterface(new MyJavaScriptInterface(this), "HtmlViewer");
-        webview.loadUrl("https://ceodelhi.gov.in/home.aspx");
+        webview.loadUrl("https://electoralsearch.in");
         webview.setWebViewClient(new WebViewClient() {
                                      @Override
                                      public void onPageFinished(WebView view, String url) {
                                          if (progress.isShowing()){
                                              progress.dismiss();
                                          }
-                                         //webview.loadUrl("javascript:window.HtmlViewer.showHTML" +"('&lt;html&gt;'+document.getElementsByTagName('form')[2].innerHTML+'&lt;/html&gt;');");
+                                         webview.loadUrl("javascript:window.HtmlViewer.showHTML" +"('&lt;html&gt;'+document.getElementsByTagName('form')[2].innerHTML+'&lt;/html&gt;');");
                                      }
                                  }
         );
