@@ -130,7 +130,7 @@ public class Main2Activity extends AppCompatActivity {
         card1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i1 = new Intent(Main2Activity.this, PollingStation.class);
+                Intent i1 = new Intent(Main2Activity.this, PollingStation2.class);
                 startActivity(i1);
             }
         });

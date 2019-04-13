@@ -58,10 +58,9 @@ public class PollingStation2 extends AppCompatActivity {
 
                 Toast.makeText(PollingStation2.this,""+product,Toast.LENGTH_LONG).show();
 
-       /*         Intent i = new Intent(getApplicationContext(), );
-                // sending data to new activity
-                i.putExtra("product", product);
-                startActivity(i);*/
+                Intent i1 = new Intent(getApplicationContext(), AllPollingStation.class);
+                i1.putExtra("product", product);
+                startActivity(i1);
 
             }
         });

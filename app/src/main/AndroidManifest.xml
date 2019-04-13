@@ -20,6 +20,12 @@
         <activity android:name=".AboutChandniChowk"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"/>
+        <activity android:name=".PollingStation2"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"/>
+        <activity android:name=".AllPollingStation"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNoActionBar"/>
         <activity android:name=".HelpActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppThemeNoActionBar"/>
